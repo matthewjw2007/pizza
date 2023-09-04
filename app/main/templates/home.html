@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Pizza</title>
+</head>
+<body>
+    <div>
+        <h1>Welcome to Pizza Pizza</h1>
+    </div>
+
+    <nav>
+        <a class="nav-link" href="{{ url_for('pizza-toppings.view_pizza_toppings') }}">Pizza Toppings Manager</a>
+        <a class="nav-link" href="{{ url_for('pizzas.view_pizzas') }}">Pizza List Manager</a>
+    </nav>
+</body>
+</html>

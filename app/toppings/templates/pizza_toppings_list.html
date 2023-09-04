@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Toppings List</title>
+    <!-- jQuery CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Pizza Toppings Manager</h1>
+
+<nav>
+    <a class="nav-link" href="{{ url_for('pizza-toppings.view_pizza_toppings') }}">Pizza Toppings Manager</a>
+    <a class="nav-link" href="{{ url_for('pizzas.view_pizzas') }}">Pizza List Manager</a>
+</nav>
+
+<form method="post" action="{{ url_for('pizza-toppings.save_topping') }}">
+    <label for="topping">Topping Name:</label>
+    <input type="text" id="topping" name="top" placeholder="Topping Name"/>
+    <label for="quantity">Amount</label>
+    <input type="number" id="quantity" name="amount" placeholder="Quantity"/>
+    <button class="add-topping-button" type="submit">Add Pizza Topping</button>
+</form>
+<p>Below is your current list of pizza toppings:</p>
+<ol>
+    {% for i in range(0, len) %}
+    <li class="toppings-list">{{TOPPINGS[i].topping_name}} -
+        <span class="toppings-qty">
+            <form method="post" action="{{ url_for('pizza-toppings.update_topping', topping_id=TOPPINGS[i].id) }}">
+                <input type="number" name="new_amount" placeholder="{{TOPPINGS[i].topping_qty}}"/>
+                <button class="update-topping" type="submit">Update Amount</button>
+            </form>
+        </span>
+        <button class="delete-topping-button" onclick="deleteTopping({{TOPPINGS[i].id}})">Delete Topping</button>
+    </li>
+    {% endfor %}
+</ol>
+<p>The total amount of individual pizza toppings available are: {{len}}</p>
+
+<script type="text/javascript">
+    function deleteTopping(toppingId) {
+        $.ajax({
+            url: "/pizza-toppings/delete-topping/" + toppingId,
+            type: "DELETE",
+            success: function (data, status) {
+                location.href = "{{url_for('pizza-toppings.view_pizza_toppings')}}";
+            }
+        });
+    }
+</script>
+</body>
+</html>

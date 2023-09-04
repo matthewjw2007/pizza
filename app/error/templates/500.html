@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Pizza: Error</title>
+    <!-- jQuery CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>An error has occurred</h1>
+<nav>
+    <a class="nav-link" href="{{ url_for('pizza-toppings.view_pizza_toppings') }}">Pizza Toppings Manager</a>
+    <a class="nav-link" href="{{ url_for('pizzas.view_pizzas') }}">Pizza List Manager</a>
+</nav>
+<p>Error: {{ error }}</p>
+<p><a href="{{ url_for('main.index') }}">Home</a></p>
+</body>

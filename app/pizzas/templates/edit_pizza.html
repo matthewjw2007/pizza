@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- jQuery CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>Pizza List Manager</h1>
+
+<nav>
+    <a class="nav-link" href="{{ url_for('pizza-toppings.view_pizza_toppings') }}">Pizza Toppings Manager</a>
+    <a class="nav-link" href="{{ url_for('pizzas.view_pizzas') }}">Pizza List Manager</a>
+</nav>
+
+<p>You are editing the following pizza</p>
+
+<form method="post" action="{{ url_for('edit-pizza.update_pizza', pizza_id=pizza.id) }}">
+    <label for="pizza-name">Pizza Name:</label>
+    <input type="text" id="pizza-name" name="pizza-name" placeholder="{{pizza.pizza_name}}"
+           value="{{pizza.pizza_name}}"/>
+    <button class="add-new-pizza" type="submit">Update Pizza</button>
+</form>
+
+<p>Current Pizza Toppings:</p>
+<div id="pizza-toppings-div">
+    <ol>
+        {% for i in range(0, current_toppings_len) %}
+        <li>{{pizza.pizza_toppings[i].toppingName}}</li>
+        <button class="remove-topping-button"
+                onclick="removeOriginalToppingFromPizza({{pizza.id}}, {{pizza.pizza_toppings[i].toppingId}})">
+            Remove Topping
+        </button>
+        {% endfor %}
+    </ol>
+</div>
+
+<p>Updated Pizza Toppings:</p>
+<div id="updated-pizza-toppings-div">
+    <ol>
+        <p>Added Toppings:</p>
+        {% for i in range(0, updated_toppings_len) %}
+        <li>{{updated_toppings[i].toppingName}}</li>
+        <button class="remove-topping-button" onclick="removingNewToppingFromPizza({{[i]}})">
+            Remove New Topping
+        </button>
+        {% endfor %}
+    </ol>
+</div>
+
+<p>Toppings Available To Add:</p>
+<ol>
+    {% for i in range(0, available_toppings_len) %}
+    <li class="toppings-list">{{available_toppings[i].topping_name}} - {{available_toppings[i].topping_qty}}
+        {% if available_toppings[i].topping_qty > 0 %}
+        <span class="toppings-qty">
+            <button class="add-topping-to-pizza-btn"
+                    onclick="addToppingTPizza({{available_toppings[i].id}})">Add Topping</button>
+        </span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ol>
+<script type="text/javascript">
+    function addToppingTPizza(toppingId) {
+        $.ajax({
+            url: "/edit-pizza/add-topping/" + toppingId,
+            type: "PUT",
+            success: function (data, status) {
+                location.href = "{{url_for('edit-pizza.edit_pizza', pizza_id=current_pizza_id)}}";
+            }
+        });
+    }
+
+    function removeOriginalToppingFromPizza(pizzaId, toppingId, toppingInfo) {
+        $.ajax({
+            url: "/edit-pizza/remove-original-topping?pizzaId=" + pizzaId + "&toppingId=" + toppingId,
+            type: "PUT",
+            success: function (data, status) {
+                location.href = "{{url_for('edit-pizza.edit_pizza', pizza_id=current_pizza_id)}}";
+            }
+        });
+    }
+
+    function removingNewToppingFromPizza(arrayIndex) {
+        $.ajax({
+            url: "/edit-pizza/remove-new-topping/" + arrayIndex,
+            type: "PUT",
+            success: function (data, status) {
+                location.href = "{{url_for('edit-pizza.edit_pizza', pizza_id=current_pizza_id)}}";
+            }
+        });
+    }
+</script>
+</body>
+</html>
